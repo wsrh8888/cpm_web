@@ -1,9 +1,25 @@
 import { request } from '@/utils/request'
-import { test } from '@/utils/config'
+import { baseUrl } from '@/utils/config'
 
-export const testApi = () => {
+export const getAllVersionsApi = (data: any) => {
   return request({
-    method: 'get',
-    url: `${test}/test`
+    method: 'post',
+    url: `${baseUrl}/cpmVersion/getCpmVersion`,
+    data
+  })
+}
+export const getCpmProjectApi = (data: any) => {
+  return request({
+    method: 'post',
+    url: `${baseUrl}/cpmProject/getCpmProject`,
+    data
+  })
+}
+
+export const getCpmVersionApi = (data: any) => {
+  return request({
+    method: 'post',
+    url: `${baseUrl}/cpmVersion/getCpmVersion`,
+    data
   })
 }

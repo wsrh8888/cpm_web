@@ -1,12 +1,14 @@
 <template>
   <div>
     <!-- 拿创建时间比，就可以得到最新的包版本 -->
-    <div class="project">
-      <h2 class="title">vue-cli</h2>
+    <div class="project" v-if="projectInfo">
+      <h2 class="title">{{projectInfo.name}}</h2>
       <div class="project_info">
-        <span>1.2.6</span>
-        <span>•Publish</span>
-        <span>a month ago</span>
+        
+         <span>•{{projectInfo.authorName}}</span>
+        <span>•{{projectInfo.typeName}}</span>
+        <span>•{{projectInfo.languageName}}</span>
+        <span>•a month ago</span>
       </div>
     </div>
     <div class="menu">
@@ -17,26 +19,58 @@
       </div>
       <div class="menu__left">
         <div>
-          <Version></Version>
+          <Version :versions="versionList"></Version>
+          <ReadMe :value="xx"></ReadMe>
         </div>
       </div>
-      <div class="menu__right">
-        
-      </div>
+      <div class="menu__right"></div>
     </div>
   </div>
 </template>
 
 <script>
 import Version from './version.vue'
+import ReadMe from './readMe.vue'
+import { getAllVersionsApi, getCpmProjectApi } from '@/api/index'
 export default {
-  name: '22',
   components: {
-    Version
+    Version,
+    ReadMe
   },
   data() {
     return {
-      a: '222'
+      a: '222',
+      xx: 'xx',
+      projectInfo: {},
+      versionList: []
+    }
+  },
+  mounted() {
+    this.getAllVersions()
+    this.getprojectInfo()
+  },
+  methods: {
+    
+    // 获取某个project的详细信息
+    getprojectInfo() {
+      getCpmProjectApi({
+        uuid: '66ac6113-f76f-4854-952d-936c0621e01d'
+      })
+      .then((data) => {
+        if (data.code === 0) {
+          this.projectInfo = data.data.list[0]
+        }
+      })
+    },
+    //获取全部的版本信息
+    getAllVersions() {
+      getAllVersionsApi({
+        projectId: '66ac6113-f76f-4854-952d-936c0621e01d'
+      }).then((data) => {
+        if (data.code === 0) {
+          this.versionList = data.result
+        }
+      })
     }
   }
 }
