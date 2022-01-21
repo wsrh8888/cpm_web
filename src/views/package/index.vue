@@ -2,25 +2,24 @@
   <div>
     <!-- 拿创建时间比，就可以得到最新的包版本 -->
     <div class="project" v-if="projectInfo">
-      <h2 class="title">{{projectInfo.name}}</h2>
+      <h2 class="title">{{ projectInfo.name }}</h2>
       <div class="project_info">
-        
-         <span>•{{projectInfo.authorName}}</span>
-        <span>•{{projectInfo.typeName}}</span>
-        <span>•{{projectInfo.languageName}}</span>
+        <span>•{{ projectInfo.authorName }}</span>
+        <span>•{{ projectInfo.typeName }}</span>
+        <span>•{{ projectInfo.languageName }}</span>
         <span>•a month ago</span>
       </div>
     </div>
     <div class="menu">
       <div class="list">
-        <div class="readme">Readme</div>
-        <div class="imports">imports</div>
-        <div class="version">Versions</div>
+        <div class="readme" @click="handleClick('readme')">Readme</div>
+        <div class="imports" @click="handleClick('imports')">Imports</div>
+        <div class="version" @click="handleClick('versions')">Versions</div>
       </div>
       <div class="menu__left">
         <div>
-          <Version :versions="versionList"></Version>
-          <ReadMe :value="xx"></ReadMe>
+          <Version v-if="select === 'versions'" :newVersion="projectInfo.cpmVersionNew" :versions="projectInfo.cpmVersions"></Version>
+          <ReadMe v-else-if="select === 'readme'" :value="xx"></ReadMe>
         </div>
       </div>
       <div class="menu__right"></div>
@@ -41,6 +40,7 @@ export default {
     return {
       a: '222',
       xx: 'xx',
+      select: 'readme',
       projectInfo: {},
       versionList: []
     }
@@ -50,15 +50,16 @@ export default {
     this.getprojectInfo()
   },
   methods: {
-    
+    handleClick(value) {
+      this.select = value
+    },
     // 获取某个project的详细信息
     getprojectInfo() {
       getCpmProjectApi({
-        uuid: '66ac6113-f76f-4854-952d-936c0621e01d'
-      })
-      .then((data) => {
+        name: this.$route.query.project
+      }).then((data) => {
         if (data.code === 0) {
-          this.projectInfo = data.data.list[0]
+          this.projectInfo = data.result
         }
       })
     },

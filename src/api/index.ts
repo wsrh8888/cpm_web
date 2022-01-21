@@ -11,7 +11,7 @@ export const getAllVersionsApi = (data: any) => {
 export const getCpmProjectApi = (data: any) => {
   return request({
     method: 'post',
-    url: `${baseUrl}/cpmProject/getCpmProject`,
+    url: `${baseUrl}/cpmProject/getCpmProjectInfo`,
     data
   })
 }

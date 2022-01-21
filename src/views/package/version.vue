@@ -1,9 +1,30 @@
 <template>
   <div>
     <div>
+      <div class="version__title">Current Tags</div>
+      <div class="version__list">
+        <span>Version</span>
+        <div class="null"></div>
+        <span>Publisher</span>
+        <div class="null"></div>
+        <span>Published</span>
+      </div>
+      <div class="content">
+        <div class="version__list">
+          <span class="version__list--name">{{ newVersion.version }}</span>
+          <div class="null"></div>
+          <span>{{ newVersion.publisherName }}</span>
+          <div class="null"></div>
+          <span>{{ momentTime(newVersion.createdAt) }}</span>
+        </div>
+      </div>
+    </div>
+    <div>
       <div class="version__title">Version History</div>
       <div class="version__list">
         <span>Version</span>
+        <div class="null"></div>
+        <span>Publisher</span>
         <div class="null"></div>
         <span>Published</span>
       </div>
@@ -11,7 +32,9 @@
         <div class="version__list" v-for="item of versions" :key="item.version">
           <span class="version__list--name">{{ item.version }}</span>
           <div class="null"></div>
-          <span>{{ item.createdAt }}</span>
+          <span>{{ item.publisherName }}</span>
+          <div class="null"></div>
+          <span>{{ momentTime(item.createdAt) }}</span>
         </div>
       </div>
     </div>
@@ -19,8 +42,22 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
+  computed: {
+    
+  },
+  methods: {
+    momentTime(value) {
+      // console.log('');
+      
+      return moment(value).startOf().fromNow()
+    }
+  },
   props: {
+    newVersion: {
+      type: Object
+    },
     versions: {
       type: Array
     }
