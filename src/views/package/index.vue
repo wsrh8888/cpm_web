@@ -19,7 +19,8 @@
       <div class="menu__left">
         <div>
           <Version v-if="select === 'versions'" :newVersion="projectInfo.cpmVersionNew" :versions="projectInfo.cpmVersions"></Version>
-          <ReadMe v-else-if="select === 'readme'" :value="xx"></ReadMe>
+          <ReadMe v-else-if="select === 'readme'" :value="mainMd"></ReadMe>
+          <ImportComponents v-else-if="select === 'imports'"></ImportComponents>
         </div>
       </div>
       <div class="menu__right"></div>
@@ -30,15 +31,18 @@
 <script>
 import Version from './version.vue'
 import ReadMe from './readMe.vue'
+import ImportComponents from './Import.vue'
 import { getAllVersionsApi, getCpmProjectApi } from '@/api/index'
+
 export default {
   components: {
     Version,
-    ReadMe
+    ReadMe,
+    ImportComponents
   },
   data() {
     return {
-      a: '222',
+      mainMd: '',
       xx: 'xx',
       select: 'readme',
       projectInfo: {},
@@ -60,6 +64,10 @@ export default {
       }).then((data) => {
         if (data.code === 0) {
           this.projectInfo = data.result
+          this.mainMd = data.result.cpmImport.filter(data => {
+            return data.name === 'main'
+          })[0].md
+          
         }
       })
     },
